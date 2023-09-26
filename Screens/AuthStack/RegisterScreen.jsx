@@ -11,7 +11,8 @@ import React, { useState, useEffect, useLayoutEffect } from "react"
 
 //** Constants
 import Colors from "../../Constants/Colors"
-// import { styles } from "../Constants/Styles/Auth/Styles"
+
+import { styles } from "../../Constants/Styles/Auth/Styles"
 
 //** Icons
 import { MaterialIcons } from "@expo/vector-icons"
@@ -20,20 +21,28 @@ import { AntDesign } from "@expo/vector-icons"
 
 //**FIREBASE
 import { app, db } from "../../Firebase/firebase"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth"
 import { addDoc, collection, setDoc, doc } from "firebase/firestore"
+
 const auth = getAuth()
 
 const RegisterScreen = ({ route, navigation }) => {
   const [name, setName] = useState("")
   // const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState(route.params.email)
+  const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [passwordConfirm, setPasswordConfirm] = useState()
   const [hidePassword, setHidePassword] = useState(true)
   const [userId, setUserId] = useState("")
   const [registerDisabled, setRegisterDisabled] = useState(true)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [user, setUser] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false })
@@ -74,7 +83,7 @@ const RegisterScreen = ({ route, navigation }) => {
   }
 
   const handleRegisterScreen = () => {
-    navigation.navigate("Login")
+    navigation.navigate("LoginScreen")
   }
 
   useEffect(() => {
@@ -102,6 +111,26 @@ const RegisterScreen = ({ route, navigation }) => {
     }
   }, [name, email, passwordConfirmed])
 
+  useEffect(() => {
+    const unsubscribeFromAuthStatusChanged = onAuthStateChanged(
+      auth,
+      (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          setUser(user)
+          navigation.navigate("HomeStack")
+          setIsLoading(false)
+        } else {
+          // User is signed out
+          setUser(undefined)
+          setIsLoading(false)
+        }
+      }
+    )
+    return unsubscribeFromAuthStatusChanged
+  }, [])
+
   return (
     // <ImageBackground
     //   source={require("../assets/background.jpg")}
@@ -111,7 +140,7 @@ const RegisterScreen = ({ route, navigation }) => {
     <View style={{ height: "100%" }}>
       <SafeAreaView style={styles.container} behavior={"padding"}>
         <View style={styles.inputContainer}>
-          <Text style={styles.header}>Register to moisten those piggies</Text>
+          <Text style={styles.header}>Let's get reading.</Text>
           <View style={styles.emailContainer}>
             <AntDesign
               name="user"
@@ -214,10 +243,6 @@ const RegisterScreen = ({ route, navigation }) => {
               Register
             </Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.orContainer}>
-          <View style={styles.divider}></View>
-          <Text style={styles.orText}>Or</Text>
         </View>
         <View style={styles.registerContainer}>
           <TouchableOpacity

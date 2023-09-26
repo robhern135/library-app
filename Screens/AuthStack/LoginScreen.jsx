@@ -17,7 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { Feather } from "@expo/vector-icons"
 
 //** Constants
-// import { styles } from "../Constants/Styles/Auth/Styles"
+import { styles } from "../../Constants/Styles/Auth/Styles"
 
 //** Firebase */
 import {
@@ -40,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
   }, [navigation])
 
   useEffect(() => {
+    console.log("usefeefct")
     const unsubscribeFromAuthStatusChanged = onAuthStateChanged(
       auth,
       (user) => {
@@ -69,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
       .catch((err) => alert(err.message))
   }
   const handleRegisterScreen = () => {
-    navigation.navigate("Register", {
+    navigation.navigate("RegisterScreen", {
       email: email,
       password: password,
     })
@@ -100,7 +101,7 @@ const LoginScreen = ({ navigation }) => {
             behavior={"padding"}
           >
             <View style={styles.inputContainer}>
-              <Text style={styles.header}>Login and let's get feetswet</Text>
+              <Text style={styles.header}>Login to get started</Text>
               {/* <Text style={styles.subheading}>
               Sign in and start logging your triggers today.
             </Text> */}
@@ -145,10 +146,6 @@ const LoginScreen = ({ navigation }) => {
               <TouchableOpacity onPress={handleLogin} style={styles.button}>
                 <Text style={styles.buttonText}>Log in</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.orContainer}>
-              <View style={styles.divider}></View>
-              <Text style={styles.orText}>Or</Text>
             </View>
             <View style={styles.registerContainer}>
               <TouchableOpacity

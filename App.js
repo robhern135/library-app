@@ -8,17 +8,17 @@ import HomeStack from "./Stacks/HomeStack"
 
 const Stack = createNativeStackNavigator()
 
-let initial = "HomeStack"
+let initial = "AuthStack"
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initial}>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="AuthStack"
           component={AuthStack}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
           name="HomeStack"
           component={HomeStack}
