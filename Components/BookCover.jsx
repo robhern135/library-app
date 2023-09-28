@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   imageshadow: {
-    width: 220,
+    width: 150,
     borderRadius: 20,
     backgroundColor: Colors.white,
     shadowColor: "#171717",

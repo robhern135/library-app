@@ -14,14 +14,14 @@ export const styles = StyleSheet.create({
   emailIcon: { position: "absolute", top: 18, left: 10 },
   passwordIcon: { position: "absolute", bottom: 17, left: 10 },
   header: {
-    fontFamily: "Montserrat_800ExtraBold",
+    // fontFamily: "Montserrat_800ExtraBold",
     fontSize: 38,
     color: "black",
     marginBottom: 30,
     textAlign: "center",
   },
   subheading: {
-    fontFamily: "Montserrat_700Medium",
+    // fontFamily: "Montserrat_700Medium",
     fontSize: 16,
     lineHeight: 16 * 1.6,
     maxWidth: 277,
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   confirmText: {
-    fontFamily: "Montserrat_500Medium",
+    // fontFamily: "Montserrat_500Medium",
     fontSize: 16,
     lineHeight: 16 * 1.6,
   },
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: "black",
     fontSize: 20,
-    fontFamily: "Montserrat_500Medium",
+    // fontFamily: "Montserrat_500Medium",
   },
   orContainer: {
     marginVertical: 30,
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
   },
 
   orText: {
-    fontFamily: "Montserrat_500Medium",
+    // fontFamily: "Montserrat_500Medium",
     position: "absolute",
     top: "50%",
     left: "50%",

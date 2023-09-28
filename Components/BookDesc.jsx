@@ -17,59 +17,39 @@ const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 let ios = Platform.OS == "ios" ? true : false
 
-const BookDesc = ({ data }) => {
-  const [bookData, setBookData] = useState()
-
-  const getData = () => {
-    axios.get(`https://openlibrary.org/works/${data}.json`).then((res) => {
-      console.log(res.data)
-      setBookData(res.data)
-    })
-  }
-
-  useEffect(() => {
-    getData()
-  }, [])
-
-  if (bookData) {
-    const { description, subjects } = bookData
-
-    if (!description && !subjects) {
-      return null
-    } else {
-      return (
-        <View style={styles.info}>
-          <View style={styles.topInfo}>
-            {description && (
-              <View style={styles.desc}>
-                <Text style={styles.descriptionText}>{description.value}</Text>
-              </View>
-            )}
-            {description && subjects ? (
-              <View style={styles.divider}></View>
-            ) : null}
-
-            {subjects && (
-              <View style={styles.pills}>
-                {subjects?.map((sub, idx) => (
-                  <View key={idx} style={styles.pill}>
-                    <Text style={styles.subject}>{sub}</Text>
-                  </View>
-                ))}
-              </View>
-            )}
+const BookDesc = ({ description, categories }) => {
+  let subjects = null
+  console.log(`typeof desc: ${typeof description}`)
+  return (
+    <View style={styles.info}>
+      <View style={styles.topInfo}>
+        {description && (
+          <View style={styles.desc}>
+            <Text style={styles.descriptionText}>{description}</Text>
           </View>
-        </View>
-      )
-    }
+        )}
+        {description && categories ? (
+          <View style={styles.divider}></View>
+        ) : null}
 
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color={Colors.blue} />
+        {categories && (
+          <View style={styles.pills}>
+            {categories?.map((sub, idx) => (
+              <View key={idx} style={styles.pill}>
+                <Text style={styles.subject}>{sub}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
-    )
-  }
-  return null
+    </View>
+  )
+
+  // return (
+  //   <View style={styles.container}>
+  //     <ActivityIndicator size="large" color={Colors.blue} />
+  //   </View>
+  // )
 }
 
 export default BookDesc
@@ -102,10 +82,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   pill: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
     borderRadius: 20,
     backgroundColor: Colors.blue,
   },
-  subject: { color: Colors.white, fontSize: 12 },
+  subject: { color: Colors.white, fontSize: 14 },
 })

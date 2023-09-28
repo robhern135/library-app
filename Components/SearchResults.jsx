@@ -19,12 +19,16 @@ const SearchResults = ({ books, authors, isbns, loading }) => {
         <ActivityIndicator size="large" color={Colors.purple} />
       ) : (
         <View style={styles.results}>
-          <SearchSection books={books} title={"Title Search"} type={"books"} />
           <SearchSection
+            books={books}
+            title={"Search Results"}
+            type={"books"}
+          />
+          {/* <SearchSection
             books={authors}
             title={"Author Search"}
             type={"authors"}
-          />
+          /> */}
           {/* <SearchSection books={isbns} title={"ISBN Search"} /> */}
         </View>
       )}

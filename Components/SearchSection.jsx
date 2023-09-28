@@ -27,10 +27,8 @@ const SearchSection = ({ books, title, type }) => {
       {books && books.length > 0 ? (
         <ScrollView style={styles.resultsInner}>
           {books?.map((book) => {
-            if (book.author_name !== undefined) {
-              console.log(book)
-              return <SearchResultItem key={book.key} book={book} />
-            }
+            console.log(book)
+            return <SearchResultItem key={book.id} book={book} />
           })}
         </ScrollView>
       ) : (

@@ -15,6 +15,8 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { debounce } from "lodash"
 import Colors from "../Constants/Colors"
+import { useNavigation } from "@react-navigation/native"
+import { StatusBar } from "expo-status-bar"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -25,7 +27,10 @@ const TopBar = ({
   isSearching,
   setIsSearching,
   handleSearch,
+  animateTitle,
 }) => {
+  const navigation = useNavigation()
+
   const handleFocus = () => {
     console.log("focusing")
     setIsSearching(true)
@@ -42,6 +47,7 @@ const TopBar = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       {isSearching && (
         <TouchableOpacity onPress={handleGoBack}>
           <Ionicons name="arrow-back" size={24} color={Colors.white} />
@@ -53,7 +59,7 @@ const TopBar = ({
           autoCorrect={false}
           style={[
             styles.input,
-            { width: isSearching ? windowWidth - 75 : windowWidth - 40 },
+            { width: isSearching ? windowWidth - 120 : windowWidth - 90 },
           ]}
           onChangeText={handleTextDebounce}
           value={text}
@@ -66,6 +72,12 @@ const TopBar = ({
           style={styles.inputicon}
         />
       </View>
+      <TouchableOpacity
+        style={styles.barcodeButton}
+        onPress={() => navigation.navigate("BarcodeScreen")}
+      >
+        <Ionicons name="barcode-sharp" size={24} color="black" />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -92,4 +104,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputicon: { position: "absolute", top: 8, left: 8 },
+  barcodeButton: {
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    width: 38,
+    height: 38,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 })

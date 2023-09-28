@@ -6,8 +6,17 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native"
-import React, { useEffect, useLayoutEffect, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
+
+import Animated, {
+  interpolate,
+  Extrapolate,
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedScrollHandler,
+} from "react-native-reanimated"
 
 import { Ionicons } from "@expo/vector-icons"
 import Colors from "../../Constants/Colors"
@@ -17,6 +26,9 @@ import BookInfo from "../../Components/BookInfo"
 import BookStats from "../../Components/BookStats"
 import BookDesc from "../../Components/BookDesc"
 import { toDataURL } from "../../Functions/Functions"
+import axios from "axios"
+
+import { truncate } from "../../Functions/Functions"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -24,61 +36,111 @@ let ios = Platform.OS == "ios" ? true : false
 
 const BookScreen = ({ route }) => {
   const navigation = useNavigation()
-  const { book } = route.params
+  const { barcode } = route.params
+  const [loading, setLoading] = useState(true)
 
-  const {
-    title,
-    cover_i,
-    author_name,
-    first_publish_year,
-    number_of_pages_median,
-    publisher,
-    ratings_average,
-    ratings_count,
-    key,
-  } = book
+  const [book, setBook] = useState(route.params.book ? route.params.book : null)
+
+  useEffect(() => {
+    if (barcode) {
+      getBookByBarcode()
+      console.log(`barcode: ${barcode}`)
+    }
+  }, [])
+
+  const getBookByBarcode = () => {
+    let api_url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${barcode}&key=AIzaSyAYiet9RL4WLv8k5HtH3zM0FEAH3ilQ6OM`
+    console.log(`url: ${api_url}`)
+
+    try {
+      axios
+        .get(api_url)
+        .then((res) => {
+          getMainData(res.data.items[0].id)
+        })
+        .catch((err) => console.log(err))
+    } catch (err) {
+      console.log(`axios error: ${err}`)
+    }
+  }
+
+  const getMainData = (id) => {
+    axios
+      .get(
+        `https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyAYiet9RL4WLv8k5HtH3zM0FEAH3ilQ6OM`
+      )
+      .then((res) => setBook(res.data))
+  }
 
   const [bgColor, setBgColor] = useState(Colors.pink)
 
-  const getBgColor = (image) => {
-    toDataURL(image)
-  }
+  // const getBgColor = (image) => {
+  //   toDataURL(image)
+  // }
 
-  useEffect(() => {
-    getBgColor(`https://covers.openlibrary.org/b/id/${cover_i}-L.jpg`)
-  }, [])
+  // useEffect(() => {
+  //   getBgColor(`https://covers.openlibrary.org/b/id/${cover_i}-L.jpg`)
+  // }, [])
 
   if (book) {
-    let image = cover_i
-      ? `https://covers.openlibrary.org/b/id/${cover_i}-L.jpg`
-      : null
-    let authors = Array.isArray(author_name)
-      ? author_name.join(", ")
-      : author_name
+    const { volumeInfo } = book
+    const {
+      title,
+      authors,
+      pageCount,
+      publishedDate,
+      description,
+      imageLinks,
+      categories,
+    } = volumeInfo
+    let author = Array.isArray(authors) ? authors.join(", ") : authors
 
-    let publishers = Array.isArray(publisher) ? publisher.join(", ") : publisher
+    // const scrollViewRef = useRef()
+    // const scrollY = useSharedValue(0)
+
+    // const scrollHandler = useAnimatedScrollHandler((event) => {
+    //   console.log(event.contentOffset.y)
+    //   scrollY.value = event.contentOffset.y
+    // })
+
+    // const animateTopTitle = useAnimatedStyle(() => {
+    //   const inputRange = [250, 500]
+    //   return {
+    //     opacity: interpolate(
+    //       scrollY.value,
+    //       inputRange,
+    //       [0, 1],
+    //       Extrapolate.CLAMP
+    //     ),
+    //   }
+    // })
 
     return (
       <View style={styles.container}>
         <View
           style={[
             styles.actions,
-            { paddingTop: ios ? 60 : 30, backgroundColor: bgColor },
+            { paddingTop: ios ? 60 : 50, backgroundColor: bgColor },
           ]}
         >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.replace("HomeScreen")}>
             <Ionicons name="arrow-back" size={24} color={Colors.black} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{title}</Text>
+          <Animated.Text style={[styles.headerTitle]}>
+            {truncate(volumeInfo.title, 30)}
+          </Animated.Text>
           <TouchableOpacity onPress={() => console.log("bookmark")}>
             <Ionicons name="bookmark-outline" size={24} color={Colors.black} />
           </TouchableOpacity>
         </View>
-        <ScrollView
+        <Animated.ScrollView
+          // ref={scrollViewRef}
+          // scrollEventThrottle={16}
+          // onScroll={scrollHandler}
           style={{
-            height: windowHeight - 105,
+            height: ios ? windowHeight - 105 : windowHeight - 40,
             backgroundColor: Colors.grey,
-            paddingTop: 50,
+            paddingTop: 30,
           }}
           contentContainerStyle={{
             alignItems: "flex-start",
@@ -87,24 +149,32 @@ const BookScreen = ({ route }) => {
             paddingBottom: 150,
           }}
         >
-          {image && <BookCover image={image} />}
+          {imageLinks && (
+            <BookCover
+              image={
+                imageLinks.thumbnail
+                  ? imageLinks.thumbnail
+                  : imageLinks.smallThumbnail
+              }
+            />
+          )}
           <BookInfo
             title={title}
-            authors={authors}
-            first_publish_year={first_publish_year}
-            pages={number_of_pages_median}
+            authors={author}
+            first_publish_year={publishedDate}
+            pages={pageCount == 0 ? "N/A" : pageCount}
           />
-          <BookStats
-            publishers={publishers}
-            ratings_average={ratings_average}
-            ratings_count={ratings_count}
-          />
-          <BookDesc data={key.replace("/works/", "")} />
-        </ScrollView>
+          {/* <BookStats
+            publishers={"publishers"}
+            ratings_average={"ratings_average"}
+            ratings_count={"ratings_count"}
+          /> */}
+          <BookDesc description={description} categories={categories} />
+        </Animated.ScrollView>
       </View>
     )
   }
-  return <ActivityIndicator size="large" color={Colors.blue} />
+  return <ActivityIndicator size="large" color={Colors.pink} />
 }
 
 export default BookScreen

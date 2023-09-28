@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from "react-native"
 import React from "react"
-import HomeScreen from "../Screens/HomeStack/HomeScreen"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+
+import HomeScreen from "../Screens/HomeStack/HomeScreen"
 import BookScreen from "../Screens/HomeStack/BookScreen"
+import BarcodeScreen from "../Screens/HomeStack/BarcodeScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -18,6 +20,11 @@ const HomeStack = () => {
         name="BookScreen"
         component={BookScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="BarcodeScreen"
+        component={BarcodeScreen}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   )
