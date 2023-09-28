@@ -25,29 +25,45 @@ import BookCover from "../../Components/BookCover"
 import BookInfo from "../../Components/BookInfo"
 import BookStats from "../../Components/BookStats"
 import BookDesc from "../../Components/BookDesc"
-import { toDataURL } from "../../Functions/Functions"
 import axios from "axios"
 
 import { truncate } from "../../Functions/Functions"
 
+//firebase
+
+import { db } from "../../Firebase/firebase"
+import { get, signOut, getAuth } from "firebase/auth"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+
 import { ENV_API_KEY } from "@env"
+import SaveBookModal from "../../Components/SaveBookModal"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 let ios = Platform.OS == "ios" ? true : false
 
 const BookScreen = ({ route }) => {
+  const auth = getAuth()
+  const user = auth.currentUser
+
   const navigation = useNavigation()
   const { barcode } = route.params
   const [loading, setLoading] = useState(true)
+  const [bgColor, setBgColor] = useState(Colors.pink)
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  // const [userData, setUserData] = useState()
 
+  // THE BOOK
   const [book, setBook] = useState(route.params.book ? route.params.book : null)
+  // BOTTOM SHEET
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
   useEffect(() => {
     if (barcode) {
       getBookByBarcode()
       console.log(`barcode: ${barcode}`)
     }
+    // getUserData()
   }, [])
 
   const getBookByBarcode = () => {
@@ -77,18 +93,29 @@ const BookScreen = ({ route }) => {
       })
   }
 
-  const [bgColor, setBgColor] = useState(Colors.pink)
+  // let docRef = doc(db, "users", user.uid)
 
-  // const getBgColor = (image) => {
-  //   toDataURL(image)
+  // const getUserData = async () => {
+  //   const docSnap = await getDoc(docRef)
+  //   if (docSnap.exists()) {
+  //     // console.log("Document data:", docSnap.data())
+  //     setUserData(docSnap.data())
+  //   } else {
+  //     // docSnap.data() will be undefined in this case
+  //     console.log("No such document!")
+  //   }
   // }
 
-  // useEffect(() => {
-  //   getBgColor(`https://covers.openlibrary.org/b/id/${cover_i}-L.jpg`)
-  // }, [])
+  //BOTTOM SHEET
+  const handleOpenBottomSheet = () => {
+    setIsBottomSheetOpen(true)
+  }
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetOpen(false)
+  }
 
   if (book) {
-    const { volumeInfo } = book
+    const { volumeInfo, id } = book
     const {
       title,
       authors,
@@ -134,8 +161,12 @@ const BookScreen = ({ route }) => {
           <Animated.Text style={[styles.headerTitle]}>
             {truncate(volumeInfo.title, 30)}
           </Animated.Text>
-          <TouchableOpacity onPress={() => console.log("bookmark")}>
-            <Ionicons name="bookmark-outline" size={24} color={Colors.black} />
+          <TouchableOpacity onPress={() => setIsBottomSheetOpen(true)}>
+            <Ionicons
+              name={isBookmarked ? "bookmark" : "bookmark-outline"}
+              size={24}
+              color={Colors.black}
+            />
           </TouchableOpacity>
         </View>
         <Animated.ScrollView
@@ -172,6 +203,14 @@ const BookScreen = ({ route }) => {
           <BookStats isbn={barcode ? barcode : null} />
           <BookDesc description={description} categories={categories} />
         </Animated.ScrollView>
+        <SaveBookModal
+          isBottomSheetOpen={isBottomSheetOpen}
+          setIsBottomSheetOpen={setIsBottomSheetOpen}
+          handleCloseBottomSheet={handleCloseBottomSheet}
+          handleOpenBottomSheet={handleOpenBottomSheet}
+          bookId={id}
+          userId={user.uid}
+        />
       </View>
     )
   }

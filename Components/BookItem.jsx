@@ -1,17 +1,23 @@
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import React from "react"
 
 import Colors from "../Constants/Colors"
 
 import { truncate } from "../Functions/Functions"
+import { useNavigation } from "@react-navigation/native"
 
-const BookItem = ({ title, author_name, cover }) => {
-  let image = `https://covers.openlibrary.org/b/id/${cover}-M.jpg`
-  let authors = Array.isArray(author_name)
-    ? author_name.join(", ")
-    : author_name
+const BookItem = ({ title, authors, cover, book }) => {
+  let navigation = useNavigation()
+  let authors_list = Array.isArray(authors) ? authors.join(", ") : authors
+  let image = cover?.thumbnail ? cover?.smallThumbnail : cover?.thumbnail
   return (
-    <View style={styles.bookItem}>
+    <TouchableOpacity
+      underlayColor={"white"}
+      style={styles.bookItem}
+      onPress={() => {
+        navigation.navigate("BookScreen", { book: book })
+      }}
+    >
       {image && (
         <View style={styles.coverContainer}>
           <View style={styles.imageshadow}>
@@ -20,8 +26,10 @@ const BookItem = ({ title, author_name, cover }) => {
         </View>
       )}
       {title && <Text style={styles.title}>{truncate(title, 30)}</Text>}
-      {authors && <Text style={styles.author}>{truncate(authors, 35)}</Text>}
-    </View>
+      {authors_list && (
+        <Text style={styles.author}>{truncate(authors_list, 35)}</Text>
+      )}
+    </TouchableOpacity>
   )
 }
 

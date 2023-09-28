@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
           setUser(user)
-          navigation.navigate("HomeStack")
+          navigation.replace("HomeStack")
           setIsLoading(false)
         } else {
           // User is signed out

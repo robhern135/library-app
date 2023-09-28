@@ -83,7 +83,7 @@ const RegisterScreen = ({ route, navigation }) => {
   }
 
   const handleRegisterScreen = () => {
-    navigation.navigate("LoginScreen")
+    navigation.replace("LoginScreen")
   }
 
   useEffect(() => {

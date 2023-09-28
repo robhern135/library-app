@@ -50,13 +50,6 @@ const HomeScreen = () => {
           setBookResults(res.data.items)
           setLoading(false)
         })
-      //authors
-      // axios
-      //   .get(`https://openlibrary.org/search.json?author=${text}}`)
-      //   .then((res) => {
-      //     setAuthorResults(res.data.docs)
-      //     setLoading(false)
-      //   })
     }
   }
 

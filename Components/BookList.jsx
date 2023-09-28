@@ -11,11 +11,12 @@ const BookList = ({ title, query }) => {
   }, [])
 
   const getBooks = () => {
-    let api_url = `https://openlibrary.org/${query}.json?limit=20`
+    let api_url = `https://www.googleapis.com/books/v1/volumes?q=subject:${query}`
+    // let api_url = `https://openlibrary.org/${query}.json?limit=20`
     console.log(`getting books for ${api_url}`)
 
     axios.get(api_url).then((res) => {
-      setBooks(res.data.works)
+      setBooks(res.data.items)
     })
   }
 
@@ -30,15 +31,19 @@ const BookList = ({ title, query }) => {
           alwaysBounceHorizontal
         >
           {books?.map((book, idx) => {
-            const { title, key, author_name, cover_i, cover_id } = book
+            // const { title, key, authors, cover_i, cover_id } = book
+            const volumeInfo = book.volumeInfo
+            const bookTitle = volumeInfo.title
+            const { id, authors, imageLinks } = volumeInfo
             if (idx <= 20) {
               return (
                 <BookItem
-                  title={title}
-                  key={key}
-                  work={key}
-                  author_name={author_name}
-                  cover={cover_i ? cover_i : cover_id}
+                  title={bookTitle}
+                  key={idx}
+                  // work={key}
+                  authors={authors}
+                  cover={imageLinks}
+                  book={book}
                 />
               )
             } else return null

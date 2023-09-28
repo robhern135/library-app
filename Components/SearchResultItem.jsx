@@ -25,7 +25,6 @@ const SearchResultItem = ({ book }) => {
     let author = Array.isArray(authors) ? authors.join(", ") : authors
     // const { title, key, author_name, first_publish_year, cover_i } = book
 
-    // let image = `https://covers.openlibrary.org/b/id/${cover_i}-M.jpg`
     // let authors = Array.isArray(author_name)
     //   ? author_name.join(", ")
     //   : author_name
