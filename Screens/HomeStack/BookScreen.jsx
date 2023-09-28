@@ -30,6 +30,8 @@ import axios from "axios"
 
 import { truncate } from "../../Functions/Functions"
 
+import { ENV_API_KEY } from "@env"
+
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 let ios = Platform.OS == "ios" ? true : false
@@ -49,7 +51,7 @@ const BookScreen = ({ route }) => {
   }, [])
 
   const getBookByBarcode = () => {
-    let api_url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${barcode}&key=AIzaSyAYiet9RL4WLv8k5HtH3zM0FEAH3ilQ6OM`
+    let api_url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${barcode}&key=${ENV_API_KEY}`
     console.log(`url: ${api_url}`)
 
     try {
@@ -67,9 +69,12 @@ const BookScreen = ({ route }) => {
   const getMainData = (id) => {
     axios
       .get(
-        `https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyAYiet9RL4WLv8k5HtH3zM0FEAH3ilQ6OM`
+        `https://www.googleapis.com/books/v1/volumes/${id}?key=${ENV_API_KEY}`
       )
-      .then((res) => setBook(res.data))
+      .then((res) => {
+        console.log(id)
+        setBook(res.data)
+      })
   }
 
   const [bgColor, setBgColor] = useState(Colors.pink)
@@ -164,11 +169,7 @@ const BookScreen = ({ route }) => {
             first_publish_year={publishedDate}
             pages={pageCount == 0 ? "N/A" : pageCount}
           />
-          {/* <BookStats
-            publishers={"publishers"}
-            ratings_average={"ratings_average"}
-            ratings_count={"ratings_count"}
-          /> */}
+          <BookStats isbn={barcode ? barcode : null} />
           <BookDesc description={description} categories={categories} />
         </Animated.ScrollView>
       </View>

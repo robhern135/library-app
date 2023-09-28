@@ -15,6 +15,8 @@ import Feed from "../../Components/Feed"
 import axios from "axios"
 import Colors from "../../Constants/Colors"
 
+import { ENV_API_KEY } from "@env"
+
 import Animated, {
   interpolate,
   Extrapolate,
@@ -42,7 +44,7 @@ const HomeScreen = () => {
       axios
         // .get(`https://openlibrary.org/search.json?title=${text}}`)
         .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${text}&key=AIzaSyAYiet9RL4WLv8k5HtH3zM0FEAH3ilQ6OM&maxResults=25&startIndex=0`
+          `https://www.googleapis.com/books/v1/volumes?q=${text}&key=${ENV_API_KEY}&maxResults=25&startIndex=0`
         )
         .then((res) => {
           setBookResults(res.data.items)

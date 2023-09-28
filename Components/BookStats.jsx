@@ -1,8 +1,10 @@
 import { Dimensions, Platform, StyleSheet, Text, View } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 import Colors from "../Constants/Colors"
 import { Ionicons } from "@expo/vector-icons"
+
+import axios from "axios"
 
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 
@@ -10,8 +12,43 @@ const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 let ios = Platform.OS == "ios" ? true : false
 
-const BookStats = ({ publishers, ratings_average, ratings_count }) => {
-  if (ratings_average && ratings_count) {
+const BookStats = ({ isbn }) => {
+  const [stats, setStats] = useState()
+
+  useEffect(() => {
+    console.log(`isbn in stats is: ${isbn}`)
+    if (isbn) {
+      getWorks()
+    }
+  }, [])
+
+  const getWorks = () => {
+    axios.get(`https://openlibrary.org/isbn/${isbn}.json`).then((res) => {
+      getBookStats(res.data.works[0].key)
+    })
+  }
+
+  const getBookStats = (id) => {
+    let workKey = id.replace("/works/", "")
+    axios
+      .get(`https://openlibrary.org/search.json?q=${workKey}`)
+      .then((res) => {
+        let stats = res.data.docs[0]
+        setStats({
+          ratings_average: stats.ratings_average,
+          ratings_count: stats.ratings_count,
+          publisher: stats.publisher,
+        })
+      })
+  }
+
+  const handlePublishers = (publishers) => {
+    return Array.isArray(stats.publisher)
+      ? stats.publisher.join(", ")
+      : stats.publisher
+  }
+
+  if (stats?.ratings_average && stats?.ratings_count) {
     return (
       <View style={styles.info}>
         <View style={styles.topInfo}>
@@ -19,24 +56,27 @@ const BookStats = ({ publishers, ratings_average, ratings_count }) => {
             <AnimatedCircularProgress
               size={70}
               width={3}
-              fill={(ratings_average.toFixed(2) / 5) * 100}
+              fill={(stats.ratings_average.toFixed(2) / 5) * 100}
               tintColor={Colors.blue}
               backgroundColor={Colors.grey}
               style={{ marginRight: 10 }}
             >
               {() => (
                 <Text style={styles.ratingNum}>
-                  {ratings_average.toFixed(2)}
+                  {stats.ratings_average.toFixed(2)}
                 </Text>
               )}
             </AnimatedCircularProgress>
             <Text style={styles.rating}>
-              from {ratings_count} rating{ratings_count > 1 ? "s" : ""}
+              from {stats.ratings_count} rating
+              {stats.ratings_count > 1 ? "s" : ""}
             </Text>
           </View>
           <View style={styles.publishers}>
             <Text style={styles.title}>Publishers</Text>
-            <Text style={styles.publishersText}>{publishers}</Text>
+            <Text style={styles.publishersText}>
+              {handlePublishers(publishers)}
+            </Text>
           </View>
         </View>
       </View>
