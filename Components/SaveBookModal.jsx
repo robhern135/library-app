@@ -15,7 +15,14 @@ import Colors from "../Constants/Colors"
 //firebase
 import { db } from "../Firebase/firebase"
 import { get, signOut, getAuth } from "firebase/auth"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -29,16 +36,12 @@ const SaveBookModal = ({
   bookId,
   userId,
 }) => {
-  const [bookData, setBookData] = useState()
-  const [bookRead, setBookRead] = useState()
-  const [bookOwn, setBookOwn] = useState()
-  const [bookWant, setBookWant] = useState()
+  const [bookRead, setBookRead] = useState([])
+  const [bookOwn, setBookOwn] = useState([])
+  const [bookWant, setBookWant] = useState([])
 
   useEffect(() => {
-    // getThisBookStatus()
-    getHasWant()
-    getHasOwn()
-    getHasRead()
+    getUsersShelves()
   }, [])
 
   let choices = [
@@ -62,90 +65,67 @@ const SaveBookModal = ({
     },
   ]
 
-  const getHasRead = async () => {
-    let docRef = doc(db, "users", userId, "shelves", "read", "books", bookId)
+  const getUsersShelves = async () => {
+    let docRef = doc(db, "users", userId, "shelves", "books")
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data())
-      setBookRead(docSnap.data())
+      const { read, own, want } = docSnap.data()
+      setBookOwn(own ? own : [])
+      setBookRead(read ? read : [])
+      setBookWant(want ? want : [])
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!")
     }
   }
-
-  const getHasOwn = async () => {
-    let docRef = doc(db, "users", userId, "shelves", "own", "books", bookId)
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data())
-      setBookOwn(docSnap.data())
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!")
-    }
-  }
-  const getHasWant = async () => {
-    let docRef = doc(db, "users", userId, "shelves", "want", "books", bookId)
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data())
-      setBookWant(docSnap.data())
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!")
-    }
-  }
-
-  // const getThisBookStatus = async () => {
-  //   const docSnap = await getDoc(docRef)
-  //   if (docSnap.exists()) {
-  //     console.log("Document data:", docSnap.data())
-  //     setBookData(docSnap.data())
-  //   } else {
-  //     // docSnap.data() will be undefined in this case
-  //     console.log("No such document!")
-  //   }
-  // }
 
   const handleOptionPress = (key) => {
-    if (key == "want") {
-      console.log("want")
-      handleWant()
-    } else if (key == "own") {
-      console.log("own")
-      handleOwn()
-    } else if (key == "read") {
-      console.log("read")
-      handleRead()
-    }
+    handleBookChange(key)
   }
 
-  const handleOwn = () => {
-    let shelfName = "own"
-    saveNewData(shelfName)
-  }
-  const handleWant = () => {
-    let shelfName = "want"
-    saveNewData(shelfName)
-  }
-  const handleRead = () => {
-    let shelfName = "read"
-    saveNewData(shelfName)
-  }
+  const handleBookChange = (shelfName) => {
+    let bookRef = doc(db, "users", userId, "shelves", "books")
 
-  const saveNewData = (shelfName) => {
-    let addRef = doc(db, "users", userId, "shelves", shelfName, "books", bookId)
-
-    try {
-      setDoc(addRef, { updated: new Date(), bookId }, { merge: true }).then(
-        () => {
-          Alert.alert(`Successfully added to shelf ${shelfName}`)
-        }
-      )
-    } catch (err) {
-      console.log(`Error at save: ${err}`)
-      Alert.alert(`Error saving to shelf ${shelfName}`)
+    if (shelfName == "read") {
+      if (bookRead?.includes(bookId)) {
+        let newArray = bookRead.filter((v) => v !== bookId)
+        setBookRead(newArray)
+        updateDoc(bookRef, { read: arrayRemove(bookId) }).then(() => {
+          Alert.alert(`Successfully removed from ${shelfName} shelf`)
+        })
+      } else {
+        setBookRead([bookId, ...bookRead])
+        updateDoc(bookRef, { read: arrayUnion(bookId) }).then(() => {
+          Alert.alert(`Successfully saved to read shelf`)
+        })
+      }
+    } else if (shelfName == "own") {
+      if (bookOwn?.includes(bookId)) {
+        let newArray = bookOwn.filter((v) => v !== bookId)
+        setBookOwn(newArray)
+        updateDoc(bookRef, { own: arrayRemove(bookId) }).then(() => {
+          Alert.alert(`Successfully removed from ${shelfName} shelf`)
+        })
+      } else {
+        setBookOwn([bookId, ...bookOwn])
+        updateDoc(bookRef, { own: arrayUnion(bookId) }).then(() => {
+          Alert.alert(`Successfully saved to read shelf`)
+        })
+      }
+    } else if (shelfName == "want") {
+      if (bookWant?.includes(bookId)) {
+        let newArray = bookWant.filter((v) => v !== bookId)
+        setBookWant(newArray)
+        updateDoc(bookRef, { want: arrayRemove(bookId) }).then(() => {
+          Alert.alert(`Successfully removed from ${shelfName} shelf`)
+        })
+      } else {
+        setBookWant([bookId, ...bookWant])
+        updateDoc(bookRef, { want: arrayUnion(bookId) }).then(() => {
+          Alert.alert(`Successfully saved to read shelf`)
+        })
+      }
     }
   }
 
@@ -182,7 +162,9 @@ const SaveBookModal = ({
                 style={styles.choice}
               >
                 <Ionicons
-                  name={check ? c.iconSelected : c.icon}
+                  name={
+                    check && check.includes(bookId) ? c.iconSelected : c.icon
+                  }
                   size={24}
                   color="black"
                 />
@@ -190,22 +172,15 @@ const SaveBookModal = ({
               </TouchableOpacity>
             )
           })}
-          {/* <TouchableOpacity style={styles.choice}>
-            <Ionicons name="bookmarks-outline" size={24} color="black" />
-            <Text style={styles.choiceText}>I Want To Read This</Text>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity style={styles.choice}>
-            <Ionicons name="ios-book-outline" size={24} color="black" />
-            <Text style={styles.choiceText}>I Own This</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.choice}>
-            <Ionicons name="checkbox-outline" size={24} color="black" />
-            <Text style={styles.choiceText}>I've Read This</Text>
-          </TouchableOpacity> */}
+
           <Text>{bookId}</Text>
         </View>
 
         {/* // Section with Information */}
+        <Text>read books :{bookRead?.length}</Text>
+        <Text>owned books :{bookOwn?.length}</Text>
+        <Text>want books :{bookWant?.length}</Text>
+        <Text>{userId}</Text>
       </View>
     </Modal>
   )
@@ -239,7 +214,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 25,
     bottom: 0,
-    height: 250,
+    height: 400,
     elevation: 5,
     shadowColor: "#171717",
     shadowOffset: { width: 6, height: 6 },

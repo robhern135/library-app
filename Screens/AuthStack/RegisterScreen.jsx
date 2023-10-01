@@ -65,7 +65,6 @@ const RegisterScreen = ({ route, navigation }) => {
                 email,
                 userCreated,
                 id: userCredential.user.uid,
-                count: 0,
               }
             )
             console.log(`UID: ${userCredential.user.uid}`)
