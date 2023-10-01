@@ -24,12 +24,6 @@ const SearchResults = ({ books, authors, isbns, loading }) => {
             title={"Search Results"}
             type={"books"}
           />
-          {/* <SearchSection
-            books={authors}
-            title={"Author Search"}
-            type={"authors"}
-          /> */}
-          {/* <SearchSection books={isbns} title={"ISBN Search"} /> */}
         </View>
       )}
     </View>
