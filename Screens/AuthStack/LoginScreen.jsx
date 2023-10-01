@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
           setUser(user)
-          navigation.replace("HomeStack")
+          navigation.replace("TabStack", { screen: "HomeScreen" })
           setIsLoading(false)
         } else {
           // User is signed out
@@ -70,10 +70,14 @@ const LoginScreen = ({ navigation }) => {
       .catch((err) => alert(err.message))
   }
   const handleRegisterScreen = () => {
-    navigation.navigate("RegisterScreen", {
-      email: email,
-      password: password,
-    })
+    navigation.navigate(
+      "AuthStack",
+      { screen: "RegisterScreen" },
+      {
+        email: email,
+        password: password,
+      }
+    )
   }
 
   return (

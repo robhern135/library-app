@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingRight: 60,
   },
+  authorpublish: { flex: 6 },
   authors: { fontSize: 16, color: Colors.black, marginBottom: 5 },
   published: { fontSize: 16, color: Colors.black, opacity: 0.7 },
   infoInner: {
@@ -61,9 +62,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-
   pagesContainer: {
-    width: 55,
+    minWidth: 55,
+    flex: 1,
     paddingHorizontal: 10,
     alignItems: "center",
     justifyContent: "center",

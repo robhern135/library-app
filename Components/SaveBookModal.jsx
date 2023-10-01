@@ -86,7 +86,6 @@ const SaveBookModal = ({
 
   const handleBookChange = (shelfName) => {
     let bookRef = doc(db, "users", userId, "shelves", "books")
-
     if (shelfName == "read") {
       if (bookRead?.includes(bookId)) {
         let newArray = bookRead.filter((v) => v !== bookId)
@@ -133,9 +132,7 @@ const SaveBookModal = ({
     <Modal
       animationType="slide"
       transparent={true}
-      // We use the state here to toggle visibility of Bottom Sheet
       visible={isBottomSheetOpen}
-      // We pass our function as default function to close the Modal
       onRequestClose={handleCloseBottomSheet}
     >
       <View style={styles.bottomSheet}>

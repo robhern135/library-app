@@ -37,6 +37,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore"
 
 import { ENV_API_KEY } from "@env"
 import SaveBookModal from "../../Components/SaveBookModal"
+import ScreenBar from "../../Components/ScreenBar"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -93,19 +94,6 @@ const BookScreen = ({ route }) => {
       })
   }
 
-  // let docRef = doc(db, "users", user.uid)
-
-  // const getUserData = async () => {
-  //   const docSnap = await getDoc(docRef)
-  //   if (docSnap.exists()) {
-  //     // console.log("Document data:", docSnap.data())
-  //     setUserData(docSnap.data())
-  //   } else {
-  //     // docSnap.data() will be undefined in this case
-  //     console.log("No such document!")
-  //   }
-  // }
-
   //BOTTOM SHEET
   const handleOpenBottomSheet = () => {
     setIsBottomSheetOpen(true)
@@ -127,29 +115,9 @@ const BookScreen = ({ route }) => {
     } = volumeInfo
     let author = Array.isArray(authors) ? authors.join(", ") : authors
 
-    // const scrollViewRef = useRef()
-    // const scrollY = useSharedValue(0)
-
-    // const scrollHandler = useAnimatedScrollHandler((event) => {
-    //   console.log(event.contentOffset.y)
-    //   scrollY.value = event.contentOffset.y
-    // })
-
-    // const animateTopTitle = useAnimatedStyle(() => {
-    //   const inputRange = [250, 500]
-    //   return {
-    //     opacity: interpolate(
-    //       scrollY.value,
-    //       inputRange,
-    //       [0, 1],
-    //       Extrapolate.CLAMP
-    //     ),
-    //   }
-    // })
-
     return (
       <View style={styles.container}>
-        <View
+        {/* <View
           style={[
             styles.actions,
             { paddingTop: ios ? 60 : 50, backgroundColor: bgColor },
@@ -168,7 +136,15 @@ const BookScreen = ({ route }) => {
               color={Colors.black}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
+        <ScreenBar
+          title={truncate(volumeInfo.title ? volumeInfo.title : "")}
+          showBack={true}
+          showBookmark={true}
+          isBookmarked={isBookmarked}
+          setIsBookmarked={setIsBookmarked}
+          setIsBottomSheetOpen={setIsBottomSheetOpen}
+        />
         <Animated.ScrollView
           // ref={scrollViewRef}
           // scrollEventThrottle={16}

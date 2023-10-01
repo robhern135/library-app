@@ -12,9 +12,6 @@ const BookList = ({ title, query }) => {
 
   const getBooks = () => {
     let api_url = `https://www.googleapis.com/books/v1/volumes?q=subject:${query}`
-    // let api_url = `https://openlibrary.org/${query}.json?limit=20`
-    console.log(`getting books for ${api_url}`)
-
     axios.get(api_url).then((res) => {
       setBooks(res.data.items)
     })
