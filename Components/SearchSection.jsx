@@ -45,10 +45,10 @@ export default SearchSection
 const styles = StyleSheet.create({
   resultsContainer: {
     gap: 5,
-    height: (windowHeight - 55) / 2,
     width: windowWidth,
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    paddingBottom: 120,
   },
   titleContainer: {
     paddingHorizontal: 10,
