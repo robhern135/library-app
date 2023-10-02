@@ -6,10 +6,12 @@ import Colors from "../Constants/Colors"
 import { truncate } from "../Functions/Functions"
 import { useNavigation } from "@react-navigation/native"
 
+import { authors_list, handleImage } from "../Functions/Functions"
+
 const BookItem = ({ title, authors, cover, book }) => {
   let navigation = useNavigation()
-  let authors_list = Array.isArray(authors) ? authors.join(", ") : authors
-  let image = cover?.thumbnail ? cover?.smallThumbnail : cover?.thumbnail
+  const authorslist = authors_list(authors)
+  let image = handleImage(cover)
   return (
     <TouchableOpacity
       underlayColor={"white"}
@@ -27,7 +29,7 @@ const BookItem = ({ title, authors, cover, book }) => {
       )}
       {title && <Text style={styles.title}>{truncate(title, 30)}</Text>}
       {authors_list && (
-        <Text style={styles.author}>{truncate(authors_list, 35)}</Text>
+        <Text style={styles.author}>{truncate(authorslist)}</Text>
       )}
     </TouchableOpacity>
   )

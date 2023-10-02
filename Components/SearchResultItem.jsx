@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native"
 
 import Colors from "../Constants/Colors"
 import TitleIcon from "./TitleIcon"
+import { handleImage } from "../Functions/Functions"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -37,9 +38,7 @@ const SearchResultItem = ({ book }) => {
         <View style={styles.imageContainer}>
           <Image
             source={{
-              uri: imageLinks?.thumbnail
-                ? imageLinks?.thumbnail
-                : imageLinks?.smallThumbnail,
+              uri: handleImage(imageLinks),
             }}
             style={{ borderRadius: 5, width: 70, height: 110 }}
           />

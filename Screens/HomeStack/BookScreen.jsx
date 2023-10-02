@@ -27,7 +27,7 @@ import BookStats from "../../Components/BookStats"
 import BookDesc from "../../Components/BookDesc"
 import axios from "axios"
 
-import { truncate } from "../../Functions/Functions"
+import { authors_list, handleImage, truncate } from "../../Functions/Functions"
 
 //firebase
 
@@ -48,14 +48,14 @@ const BookScreen = ({ route }) => {
   const user = auth.currentUser
 
   const navigation = useNavigation()
-  const { barcode } = route.params
+  const barcode = route.params ? route.params.barcode : null
   const [loading, setLoading] = useState(true)
   const [bgColor, setBgColor] = useState(Colors.pink)
   const [isBookmarked, setIsBookmarked] = useState(false)
   // const [userData, setUserData] = useState()
 
   // THE BOOK
-  const [book, setBook] = useState(route.params.book ? route.params.book : null)
+  const [book, setBook] = useState()
   // BOTTOM SHEET
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
@@ -63,8 +63,9 @@ const BookScreen = ({ route }) => {
     if (barcode) {
       getBookByBarcode()
       console.log(`barcode: ${barcode}`)
+    } else {
+      setBook(route.params.book)
     }
-    // getUserData()
   }, [])
 
   const getBookByBarcode = () => {
@@ -113,30 +114,10 @@ const BookScreen = ({ route }) => {
       imageLinks,
       categories,
     } = volumeInfo
-    let author = Array.isArray(authors) ? authors.join(", ") : authors
+    let author = authors_list(authors)
 
     return (
       <View style={styles.container}>
-        {/* <View
-          style={[
-            styles.actions,
-            { paddingTop: ios ? 60 : 50, backgroundColor: bgColor },
-          ]}
-        >
-          <TouchableOpacity onPress={() => navigation.replace("HomeScreen")}>
-            <Ionicons name="arrow-back" size={24} color={Colors.black} />
-          </TouchableOpacity>
-          <Animated.Text style={[styles.headerTitle]}>
-            {truncate(volumeInfo.title, 30)}
-          </Animated.Text>
-          <TouchableOpacity onPress={() => setIsBottomSheetOpen(true)}>
-            <Ionicons
-              name={isBookmarked ? "bookmark" : "bookmark-outline"}
-              size={24}
-              color={Colors.black}
-            />
-          </TouchableOpacity>
-        </View> */}
         <ScreenBar
           title={truncate(volumeInfo.title ? volumeInfo.title : "")}
           showBack={true}
@@ -161,15 +142,7 @@ const BookScreen = ({ route }) => {
             paddingBottom: 150,
           }}
         >
-          {imageLinks && (
-            <BookCover
-              image={
-                imageLinks.thumbnail
-                  ? imageLinks.thumbnail
-                  : imageLinks.smallThumbnail
-              }
-            />
-          )}
+          {imageLinks && <BookCover image={handleImage(imageLinks)} />}
           <BookInfo
             title={title}
             authors={author}

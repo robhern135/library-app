@@ -34,7 +34,7 @@ const ScreenBar = ({
       ]}
     >
       {showBack ? (
-        <TouchableOpacity onPress={() => navigation.replace("HomeScreen")}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={Colors.black} />
         </TouchableOpacity>
       ) : (

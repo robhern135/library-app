@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 
 import Colors from "../Constants/Colors"
 import { Ionicons } from "@expo/vector-icons"
-import BookItem from "./BookItem"
+import ShelfItem from "./ShelfItem"
 
 const Shelf = ({ title, icon, data }) => {
   return (
@@ -20,7 +20,7 @@ const Shelf = ({ title, icon, data }) => {
       >
         {data?.map((bookId) => {
           //get book somewhere
-          return <Text key={bookId}>{bookId}</Text>
+          return <ShelfItem id={bookId} key={bookId} />
         })}
       </ScrollView>
     </View>
@@ -30,6 +30,7 @@ const Shelf = ({ title, icon, data }) => {
 export default Shelf
 
 const styles = StyleSheet.create({
+  shelf: { flex: 1, paddingBottom: 40 },
   titleContainer: {
     flexDirection: "row",
     gap: 10,
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
   },
+  shelfView: { paddingTop: 20 },
   shelfTitle: {
     fontSize: 20,
     fontWeight: "bold",

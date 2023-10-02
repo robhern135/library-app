@@ -1,4 +1,11 @@
-import { ScrollView, Dimensions, StyleSheet, Text, View } from "react-native"
+import {
+  ScrollView,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  ScrollViewBase,
+} from "react-native"
 import React, { useEffect, useState } from "react"
 import ScreenBar from "../../Components/ScreenBar"
 
@@ -67,13 +74,20 @@ const ShelvesScreen = () => {
   return (
     <View style={styles.container}>
       <ScreenBar title="My Bookshelves" showBack={false} showBookmark={false} />
-      <View style={styles.shelves}>
+      <ScrollView
+        style={styles.shelves}
+        contentContainerStyle={{
+          paddingBottom: 150,
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+        }}
+      >
         {choices &&
           choices?.map((choice) => {
             const { title, data, key, icon } = choice
             return <Shelf title={title} data={data} key={key} icon={icon} />
           })}
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -82,11 +96,8 @@ export default ShelvesScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: windowWidth,
     alignItems: "stretch",
-    justifyContent: "flex-start",
   },
-
-  shelves: { paddingTop: 40, gap: 40 },
+  shelves: { paddingTop: 40 },
 })
