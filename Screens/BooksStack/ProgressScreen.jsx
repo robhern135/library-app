@@ -62,14 +62,23 @@ const ProgressScreen = ({ route }) => {
           }}
         >
           {readingBooks?.map((book) => {
-            const { id, progress, title } = book
+            console.log(book)
+            const { id, progress, title, author } = book
             return (
-              <ReadingItem title={title} progress={progress} id={id} key={id} />
+              <ReadingItem
+                title={title}
+                progress={progress}
+                id={id}
+                key={id}
+                authors={author}
+              />
             )
           })}
         </ScrollView>
       ) : (
-        <ActivityIndicator size="large" color={Colors.blue} />
+        <View style={{ flex: 1 }}>
+          <ActivityIndicator size="large" color={Colors.blue} />
+        </View>
       )}
     </View>
   )
@@ -78,6 +87,10 @@ const ProgressScreen = ({ route }) => {
 export default ProgressScreen
 
 const styles = StyleSheet.create({
-  alignItems: "flex-start",
-  justifyContent: "stretch",
+  container: {
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    backgroundColor: Colors.white,
+    flex: 1,
+  },
 })
