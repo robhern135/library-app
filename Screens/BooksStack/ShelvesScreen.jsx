@@ -15,6 +15,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore"
 import Colors from "../../Constants/Colors"
 import { Ionicons } from "@expo/vector-icons"
 import Shelf from "../../Components/Shelf"
+import ReadingProgressButton from "../../Components/ReadingProgressButton"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -82,6 +83,7 @@ const ShelvesScreen = () => {
           justifyContent: "flex-start",
         }}
       >
+        <ReadingProgressButton userId={userId} />
         {choices &&
           choices?.map((choice) => {
             const { title, data, key, icon } = choice
@@ -99,5 +101,5 @@ const styles = StyleSheet.create({
     width: windowWidth,
     alignItems: "stretch",
   },
-  shelves: { paddingTop: 40 },
+  shelves: { paddingTop: 30 },
 })

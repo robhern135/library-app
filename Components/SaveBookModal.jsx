@@ -90,40 +90,28 @@ const SaveBookModal = ({
       if (bookRead?.includes(bookId)) {
         let newArray = bookRead.filter((v) => v !== bookId)
         setBookRead(newArray)
-        updateDoc(bookRef, { read: arrayRemove(bookId) }).then(() => {
-          Alert.alert(`Successfully removed from ${shelfName} shelf`)
-        })
+        updateDoc(bookRef, { read: arrayRemove(bookId) })
       } else {
         setBookRead([bookId, ...bookRead])
-        updateDoc(bookRef, { read: arrayUnion(bookId) }).then(() => {
-          Alert.alert(`Successfully saved to read shelf`)
-        })
+        updateDoc(bookRef, { read: arrayUnion(bookId) })
       }
     } else if (shelfName == "own") {
       if (bookOwn?.includes(bookId)) {
         let newArray = bookOwn.filter((v) => v !== bookId)
         setBookOwn(newArray)
-        updateDoc(bookRef, { own: arrayRemove(bookId) }).then(() => {
-          Alert.alert(`Successfully removed from ${shelfName} shelf`)
-        })
+        updateDoc(bookRef, { own: arrayRemove(bookId) })
       } else {
         setBookOwn([bookId, ...bookOwn])
-        updateDoc(bookRef, { own: arrayUnion(bookId) }).then(() => {
-          Alert.alert(`Successfully saved to read shelf`)
-        })
+        updateDoc(bookRef, { own: arrayUnion(bookId) })
       }
     } else if (shelfName == "want") {
       if (bookWant?.includes(bookId)) {
         let newArray = bookWant.filter((v) => v !== bookId)
         setBookWant(newArray)
-        updateDoc(bookRef, { want: arrayRemove(bookId) }).then(() => {
-          Alert.alert(`Successfully removed from ${shelfName} shelf`)
-        })
+        updateDoc(bookRef, { want: arrayRemove(bookId) })
       } else {
         setBookWant([bookId, ...bookWant])
-        updateDoc(bookRef, { want: arrayUnion(bookId) }).then(() => {
-          Alert.alert(`Successfully saved to read shelf`)
-        })
+        updateDoc(bookRef, { want: arrayUnion(bookId) })
       }
     }
   }

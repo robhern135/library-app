@@ -23,19 +23,19 @@ const ScreenBar = ({
   setIsBookmarked,
   setIsBottomSheetOpen,
 }) => {
-  const [bgColor, setBgColor] = useState(Colors.pink)
+  const [bgColor, setBgColor] = useState(Colors.blue)
   const navigation = useNavigation()
 
   return (
     <View
       style={[
         styles.actions,
-        { paddingTop: ios ? 60 : 50, backgroundColor: bgColor },
+        { paddingTop: ios ? 70 : 50, backgroundColor: bgColor },
       ]}
     >
       {showBack ? (
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={Colors.black} />
+          <Ionicons name="arrow-back" size={24} color={Colors.white} />
         </TouchableOpacity>
       ) : (
         <View></View>
@@ -47,7 +47,7 @@ const ScreenBar = ({
           <Ionicons
             name={isBookmarked ? "bookmark" : "bookmark-outline"}
             size={24}
-            color={Colors.black}
+            color={Colors.white}
           />
         </TouchableOpacity>
       ) : (
@@ -67,4 +67,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
+  headerTitle: { color: Colors.white, fontSize: 15 },
 })

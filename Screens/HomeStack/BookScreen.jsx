@@ -38,6 +38,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore"
 import { ENV_API_KEY } from "@env"
 import SaveBookModal from "../../Components/SaveBookModal"
 import ScreenBar from "../../Components/ScreenBar"
+import StartReading from "../../Components/StartReading"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
@@ -149,6 +150,7 @@ const BookScreen = ({ route }) => {
             first_publish_year={publishedDate}
             pages={pageCount == 0 ? "N/A" : pageCount}
           />
+          <StartReading id={id} userId={user.uid} book={book} />
           <BookStats isbn={barcode ? barcode : null} />
           <BookDesc description={description} categories={categories} />
         </Animated.ScrollView>
