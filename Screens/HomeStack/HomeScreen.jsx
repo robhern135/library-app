@@ -37,6 +37,8 @@ const HomeScreen = () => {
   const [authorResults, setAuthorResults] = useState()
   const [loading, setLoading] = useState(false)
 
+  const [maxResults, setMaxResults] = useState(1)
+
   const handleSearch = (text) => {
     if (text && text.length > 3) {
       setLoading(true)
@@ -44,7 +46,7 @@ const HomeScreen = () => {
       axios
         // .get(`https://openlibrary.org/search.json?title=${text}}`)
         .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${text}&key=${ENV_API_KEY}&maxResults=25&startIndex=0`
+          `https://www.googleapis.com/books/v1/volumes?q=${text}&key=${ENV_API_KEY}&maxResults=${maxResults}&startIndex=0`
         )
         .then((res) => {
           setBookResults(res.data.items)

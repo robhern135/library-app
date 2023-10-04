@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native"
 import React from "react"
-import * as Progress from "react-native-progress"
 import Colors from "../Constants/Colors"
 
 const ReadingProgressBar = ({ num }) => {

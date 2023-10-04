@@ -52,6 +52,11 @@ const ProgressScreen = ({ route }) => {
         showBack={true}
         showBookmark={false}
       />
+      <View style={styles.subtitle}>
+        <Text style={styles.subtitleText}>
+          Select a book below to update your reading progress.
+        </Text>
+      </View>
       {readingBooks ? (
         <ScrollView
           style={styles.progressContainer}
@@ -93,4 +98,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     flex: 1,
   },
+  subtitle: { padding: 20, alignItems: "center" },
+  subtitleText: { fontSize: 15, color: Colors.black },
 })

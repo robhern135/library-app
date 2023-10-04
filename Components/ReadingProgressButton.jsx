@@ -14,7 +14,7 @@ const ReadingProgressButton = ({ userId }) => {
         }
         style={styles.readingProgress}
       >
-        <Text style={styles.readingText}>Update reading progress</Text>
+        <Text style={styles.readingText}>Reading progress</Text>
       </TouchableOpacity>
     </View>
   )

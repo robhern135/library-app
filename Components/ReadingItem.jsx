@@ -1,4 +1,11 @@
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native"
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import React, { useEffect, useState } from "react"
 
 import { authors_list, handleImage } from "../Functions/Functions"
@@ -11,11 +18,13 @@ import ReadingProgressBar from "./ReadingProgressBar"
 
 import { Ionicons } from "@expo/vector-icons"
 import ReadingProgressInfo from "./ReadingProgressInfo"
+import { useNavigation } from "@react-navigation/native"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 
 const ReadingItem = ({ title, progress, id, authors }) => {
+  let navigation = useNavigation()
   const [book, setBook] = useState()
   const [bookAuthors, setBookAuthors] = useState(authors)
   const [bookTitle, setBookTitle] = useState(title)
@@ -55,9 +64,18 @@ const ReadingItem = ({ title, progress, id, authors }) => {
     getBookById()
   }, [])
 
+  const handlePress = () => {
+    navigation.navigate("UpdateProgressScreen", {
+      title,
+      authors: authors_list(bookAuthors),
+      id,
+      progress,
+    })
+  }
+
   if (book) {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={handlePress}>
         <View style={styles.coverContainer}>
           <View style={styles.imageshadow}>
             <Image
@@ -77,7 +95,7 @@ const ReadingItem = ({ title, progress, id, authors }) => {
             pageCount={pageCount}
           />
         </View>
-      </View>
+      </TouchableOpacity>
     )
   } else return null
 }
@@ -91,11 +109,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 10,
+    gap: 20,
     borderBottomWidth: 2,
     borderBottomColor: Colors.grey,
     backgroundColor: Colors.white,
     alignSelf: "center",
+    paddingTop: 10,
   },
   bold: { fontWeight: "bold" },
   title: { fontSize: 20, fontWeight: "bold" },
