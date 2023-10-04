@@ -2,9 +2,11 @@ import { StyleSheet, Text, View } from "react-native"
 import React, { useLayoutEffect } from "react"
 import { useNavigation } from "@react-navigation/native"
 import ReadingItem from "../../Components/ReadingItem"
+import { handleDate } from "../../Functions/Functions"
 
 const UpdateProgressScreen = ({ route }) => {
-  const { title, authors, id, progress } = route.params
+  const { title, authors, id, progress, cover, pageCount, timestamp } =
+    route.params
   let navigation = useNavigation()
 
   useLayoutEffect(() => {
@@ -13,14 +15,13 @@ const UpdateProgressScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <ReadingItem
-        title={title}
-        progress={progress}
-        id={id}
-        key={id}
-        authors={authors}
-        isButton={true}
-      />
+      <Text>{title}</Text>
+      <Text>{authors}</Text>
+      <Text>{id}</Text>
+      <Text>{progress}</Text>
+      <Text>{cover}</Text>
+      <Text>{pageCount}</Text>
+      <Text>started reading: {handleDate(timestamp)}</Text>
     </View>
   )
 }

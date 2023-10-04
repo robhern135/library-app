@@ -23,34 +23,42 @@ import { useNavigation } from "@react-navigation/native"
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
 
-const ReadingItem = ({ title, progress, id, authors }) => {
+const ReadingItem = ({
+  title,
+  progress,
+  id,
+  authors,
+  cover,
+  pageCount,
+  timestamp,
+}) => {
   let navigation = useNavigation()
-  const [book, setBook] = useState()
+  // const [book, setBook] = useState(book)
   const [bookAuthors, setBookAuthors] = useState(authors)
   const [bookTitle, setBookTitle] = useState(title)
-  const [bookCover, setBookCover] = useState()
+  const [bookCover, setBookCover] = useState(cover)
   const [bookProgress, setBookProgress] = useState(progress)
   const [progressPercent, setProgressPercent] = useState()
-  const [pageCount, setPageCount] = useState()
+  const [bookPageCount, setBookPageCount] = useState(pageCount)
 
-  const getBookById = () => {
-    let api_url = `https://www.googleapis.com/books/v1/volumes/${id}?key=${ENV_API_KEY}`
-    console.log(api_url)
-    axios.get(api_url).then((res) => {
-      setBook(res.data)
-      bookAuthors == null ? setBookAuthors(res.data.volumeInfo.authors) : null
-      bookTitle == null ? setBookTitle(res.data.volumeInfo.title) : null
-      setBookCover(res.data.volumeInfo.imageLinks)
-      setPageCount(
-        res.data.volumeInfo.printedPageCount
-          ? res.data.volumeInfo.printedPageCount
-          : res.data.volumeInfo.pageCount
-      )
-    })
-  }
+  // const getBookById = () => {
+  //   let api_url = `https://www.googleapis.com/books/v1/volumes/${id}?key=${ENV_API_KEY}`
+  //   console.log(api_url)
+  //   axios.get(api_url).then((res) => {
+  //     setBook(res.data)
+  //     bookAuthors == null ? setBookAuthors(res.data.volumeInfo.authors) : null
+  //     bookTitle == null ? setBookTitle(res.data.volumeInfo.title) : null
+  //     setBookCover(res.data.volumeInfo.imageLinks)
+  //     setPageCount(
+  //       res.data.volumeInfo.printedPageCount
+  //         ? res.data.volumeInfo.printedPageCount
+  //         : res.data.volumeInfo.pageCount
+  //     )
+  //   })
+  // }
 
   const makeProgress = () => {
-    let percent = (bookProgress / pageCount) * 100
+    let percent = (bookProgress / bookPageCount) * 100
     let percentNumber = Math.floor(percent)
     setProgressPercent(percentNumber)
     console.log(percentNumber)
@@ -58,10 +66,11 @@ const ReadingItem = ({ title, progress, id, authors }) => {
 
   useEffect(() => {
     makeProgress()
-  }, [pageCount])
+  }, [bookPageCount])
 
   useEffect(() => {
-    getBookById()
+    //   getBookById()
+    console.log(cover)
   }, [])
 
   const handlePress = () => {
@@ -70,34 +79,38 @@ const ReadingItem = ({ title, progress, id, authors }) => {
       authors: authors_list(bookAuthors),
       id,
       progress,
+      timestamp,
+      pageCount: bookPageCount,
+      cover: handleImage(bookCover),
     })
   }
 
-  if (book) {
-    return (
-      <TouchableOpacity style={styles.container} onPress={handlePress}>
-        <View style={styles.coverContainer}>
-          <View style={styles.imageshadow}>
-            <Image
-              source={{ uri: handleImage(bookCover) }}
-              style={styles.cover}
-            />
-          </View>
-        </View>
-        <View style={styles.bookInfo}>
-          {bookTitle && <Text style={styles.title}>{bookTitle}</Text>}
-          {bookAuthors && (
-            <Text style={styles.authors}>{authors_list(bookAuthors)}</Text>
-          )}
-          <ReadingProgressInfo
-            progressPercent={progressPercent}
-            bookProgress={bookProgress}
-            pageCount={pageCount}
+  // if (book) {
+  return (
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
+      <View style={styles.coverContainer}>
+        <View style={styles.imageshadow}>
+          <Image
+            source={{ uri: handleImage(bookCover) }}
+            style={styles.cover}
           />
         </View>
-      </TouchableOpacity>
-    )
-  } else return null
+      </View>
+
+      <View style={styles.bookInfo}>
+        {bookTitle && <Text style={styles.title}>{bookTitle}</Text>}
+        {bookAuthors && (
+          <Text style={styles.authors}>{authors_list(bookAuthors)}</Text>
+        )}
+        <ReadingProgressInfo
+          progressPercent={progressPercent}
+          bookProgress={bookProgress}
+          pageCount={bookPageCount}
+        />
+      </View>
+    </TouchableOpacity>
+  )
+  // } else return null
 }
 
 export default ReadingItem

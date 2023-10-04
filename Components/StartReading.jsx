@@ -13,6 +13,7 @@ import {
   arrayRemove,
   collection,
   getDocs,
+  serverTimestamp,
 } from "firebase/firestore"
 import { useNavigation } from "@react-navigation/native"
 
@@ -66,6 +67,11 @@ const StartReading = ({ id, userId, book }) => {
       progress: 0,
       title: book.volumeInfo.title,
       author: book.volumeInfo.authors,
+      pageCount: book.volumeInfo.printedPageCount
+        ? book.volumeInfo.printedPageCount
+        : book.volumeInfo.pageCount,
+      cover: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks : null,
+      timestamp: serverTimestamp(),
     }).then(() => console.log("added"))
 
     // }
@@ -79,10 +85,12 @@ const StartReading = ({ id, userId, book }) => {
     // }
     //**remove from want to read shelf
 
+    let wantRef = doc(db, "users", userId, "shelves", "books")
+
     if (wantBooks?.includes(id)) {
       let newArray = wantBooks.filter((v) => v !== id)
       setWantBooks(newArray)
-      updateDoc(bookRef, { want: arrayRemove(id) })
+      updateDoc(wantRef, { want: arrayRemove(id) })
     }
     navigation.navigate("BooksStack", {
       screen: "ProgressScreen",

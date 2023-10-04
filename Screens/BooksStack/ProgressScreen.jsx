@@ -68,15 +68,22 @@ const ProgressScreen = ({ route }) => {
         >
           {readingBooks?.map((book) => {
             console.log(book)
-            const { id, progress, title, author } = book
+            const { id, progress, title, author, pageCount, timestamp, cover } =
+              book
             return (
-              <ReadingItem
-                title={title}
-                progress={progress}
-                id={id}
-                key={id}
-                authors={author}
-              />
+              <>
+                <ReadingItem
+                  title={title}
+                  progress={progress}
+                  id={id}
+                  key={id}
+                  authors={author}
+                  cover={cover}
+                  pageCount={pageCount}
+                  timestamp={timestamp}
+                />
+                <Text>{timestamp.toString()}</Text>
+              </>
             )
           })}
         </ScrollView>
