@@ -114,15 +114,12 @@ const StartReading = ({ id, userId, book }) => {
         }
       >
         {id && (
-          <>
-            <Text style={styles.readingText}>
-              {readingThisBook ? "Update reading progress" : "Start reading"}
-            </Text>
-            <Text style={styles.readingText}>{id}</Text>
-          </>
+          <Text style={styles.readingText}>
+            {readingThisBook ? "Update reading progress" : "Start reading"}
+          </Text>
         )}
       </TouchableOpacity>
-      <Text>is reading: {readingThisBook ? "true" : "false"}</Text>
+      {/* <Text>is reading: {readingThisBook ? "true" : "false"}</Text> */}
     </View>
   )
 }
@@ -142,5 +139,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 5,
   },
-  readingText: { fontSize: 20, fontWeight: "bold", color: Colors.black },
+  readingText: { fontSize: 20, fontWeight: "bold", color: Colors.white },
 })

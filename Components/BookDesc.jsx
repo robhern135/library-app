@@ -9,9 +9,8 @@ import {
 import React, { useEffect, useState } from "react"
 
 import Colors from "../Constants/Colors"
-import { Ionicons } from "@expo/vector-icons"
 
-import axios from "axios"
+import { WebView } from "react-native-webview"
 
 const windowWidth = Dimensions.get("window").width
 const windowHeight = Dimensions.get("window").height
