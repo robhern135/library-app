@@ -23,7 +23,7 @@ const ScreenBar = ({
   setIsBookmarked,
   setIsBottomSheetOpen,
 }) => {
-  const [bgColor, setBgColor] = useState(Colors.blue)
+  const [bgColor, setBgColor] = useState(Colors.primary)
   const navigation = useNavigation()
 
   return (
@@ -67,5 +67,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
-  headerTitle: { color: Colors.white, fontSize: 15 },
+  headerTitle: { color: Colors.white, fontSize: 15, fontWeight: "bold" },
 })

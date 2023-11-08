@@ -57,7 +57,7 @@ const BookStats = ({ isbn }) => {
               size={70}
               width={3}
               fill={(stats.ratings_average.toFixed(2) / 5) * 100}
-              tintColor={Colors.blue}
+              tintColor={Colors.primary}
               backgroundColor={Colors.grey}
               style={{ marginRight: 10 }}
             >

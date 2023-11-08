@@ -51,7 +51,7 @@ const BookScreen = ({ route }) => {
   const navigation = useNavigation()
   const barcode = route.params ? route.params.barcode : null
   const [loading, setLoading] = useState(true)
-  const [bgColor, setBgColor] = useState(Colors.pink)
+  const [bgColor, setBgColor] = useState(Colors.primary)
   const [isBookmarked, setIsBookmarked] = useState(false)
   // const [userData, setUserData] = useState()
 
@@ -165,7 +165,7 @@ const BookScreen = ({ route }) => {
       </View>
     )
   }
-  return <ActivityIndicator size="large" color={Colors.pink} />
+  return <ActivityIndicator size="large" color={Colors.primary} />
 }
 
 export default BookScreen

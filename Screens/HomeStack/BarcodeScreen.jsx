@@ -63,7 +63,7 @@ const BarcodeScreen = () => {
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color={Colors.blue} />
+          <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       ) : (
         <BarCodeScanner

@@ -66,30 +66,27 @@ const ProgressScreen = ({ route }) => {
             gap: 0,
           }}
         >
-          {readingBooks?.map((book) => {
+          {readingBooks?.map((book, idx) => {
             console.log(book)
             const { id, progress, title, author, pageCount, timestamp, cover } =
               book
             return (
-              <>
-                <ReadingItem
-                  title={title}
-                  progress={progress}
-                  id={id}
-                  key={id}
-                  authors={author}
-                  cover={cover}
-                  pageCount={pageCount}
-                  timestamp={timestamp}
-                />
-                <Text>{timestamp.toString()}</Text>
-              </>
+              <ReadingItem
+                title={title}
+                progress={progress}
+                id={id}
+                key={`${id}-${idx}`}
+                authors={author}
+                cover={cover}
+                pageCount={pageCount}
+                timestamp={timestamp}
+              />
             )
           })}
         </ScrollView>
       ) : (
         <View style={{ flex: 1 }}>
-          <ActivityIndicator size="large" color={Colors.blue} />
+          <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       )}
     </View>

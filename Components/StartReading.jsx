@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   container: { paddingHorizontal: 20, width: "100%" },
   startReading: {
     alignItems: "center",
-    backgroundColor: Colors.pink,
+    backgroundColor: Colors.primary,
     shadowColor: Colors.black,
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: { paddingHorizontal: 20, width: "100%" },
   readingProgress: {
     alignItems: "center",
-    backgroundColor: Colors.pink,
+    backgroundColor: Colors.primary,
     shadowColor: Colors.black,
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
@@ -36,5 +36,5 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 40,
   },
-  readingText: { fontSize: 20, fontWeight: "bold", color: Colors.black },
+  readingText: { fontSize: 20, fontWeight: "bold", color: Colors.white },
 })

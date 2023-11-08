@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     paddingHorizontal: 20,
     justifyContent: "flex-end",
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.primary,
     paddingTop: ios ? 60 : 30,
   },
   title: {

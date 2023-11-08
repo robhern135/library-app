@@ -39,7 +39,7 @@ export const TabStack = () => {
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />
         },
-        tabBarActiveTintColor: Colors.blue,
+        tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.black,
       })}
     >

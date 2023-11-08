@@ -16,7 +16,7 @@ const SearchResults = ({ books, authors, isbns, loading }) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color={Colors.purple} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       ) : (
         <View style={styles.results}>
           <SearchSection

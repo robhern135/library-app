@@ -47,7 +47,7 @@ const BookDesc = ({ description, categories }) => {
 
   // return (
   //   <View style={styles.container}>
-  //     <ActivityIndicator size="large" color={Colors.blue} />
+  //     <ActivityIndicator size="large" color={Colors.primary} />
   //   </View>
   // )
 }
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 2,
     borderRadius: 5,
-    backgroundColor: Colors.grey,
+    backgroundColor: Colors.primary,
     marginVertical: 20,
   },
   descriptionText: { fontSize: 16 },
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.primary,
   },
   subject: { color: Colors.white, fontSize: 14 },
 })
